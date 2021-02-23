@@ -1,7 +1,7 @@
 //@ts-check
 
 
-const createPostValidator = (req, res, next) => {
+exports.createPostValidator = (req, res, next) => {
     req.check('title', 'Title should not be empty').notEmpty()
     req.check('title', 'Title must be between 4 to 150 characters')
         .isLength({
@@ -20,10 +20,9 @@ const createPostValidator = (req, res, next) => {
         return res.status(400).json({ error: firstError })
     }
     next()
-
 }
 
-const createNewsValidator = (req, res, next) => {
+exports.addFavoriteValidator = (req, res, next) => {
     req.check('title', 'Title should not be empty').notEmpty()
     req.check('url', 'Url is required').notEmpty()
     const errors = req.validationErrors()
@@ -34,7 +33,17 @@ const createNewsValidator = (req, res, next) => {
     next()
 }
 
-const createSignupValidator = (req, res, next) => {
+exports.removeFavoriteValidator = (req, res, next) => {
+    req.check('url', 'Url is required').notEmpty()
+    const errors = req.validationErrors()
+    if (errors) {
+        const firstErr = errors.map(err => err.msg)[0]
+        return res.status(400).json({ error: firstErr })
+    }
+    next()
+}
+
+exports.createSignupValidator = (req, res, next) => {
     console.log('req', req.body)
     req.check('name', 'Name is required').notEmpty()
     req.check('email', 'Email is required').notEmpty()
@@ -51,11 +60,6 @@ const createSignupValidator = (req, res, next) => {
     next()
 }
 
-const createSigninValidator = (req, res, next) => {
+exports.createSigninValidator = (req, res, next) => {
     next()
-}
-
-module.exports = {
-    createNewsValidator, createPostValidator,
-    createSignupValidator, createSigninValidator
 }

@@ -12,9 +12,10 @@ const newsSchema = new mongoose.Schema({
     author: { type: String },
     description: { type: String },
     publishedAt: { type: String },
-    url: { type: String, required: true },
+    url: { type: String, required: true, unique: true },
     urlToImage: { type: String },
-    user: { type: ObjectId, ref: 'User' }
+    users: [{ type: ObjectId, ref: 'User' }],
+    source: { type: Object }
 })
 
 module.exports = mongoose.model('News', newsSchema, 'favoriteNews')

@@ -5,7 +5,8 @@ const { requireSignin } = require('../controllers/auth')
 
 const router = express.Router()
 
-router.post('/favorite/add', requireSignin, validator.createNewsValidator, controller.addFavorite)
+router.post('/favorite/add', requireSignin, validator.addFavoriteValidator, controller.addFavorite)
+router.post('/favorite/remove', requireSignin, validator.removeFavoriteValidator, controller.removeFavorite)
 router.get('/favorites', requireSignin, controller.getFavorites)
 
 module.exports = router
