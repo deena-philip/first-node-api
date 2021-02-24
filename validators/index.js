@@ -1,8 +1,9 @@
 //@ts-check
 
+const EmailRegex = /.+\@.+\..+/
 
 exports.createPostValidator = (req, res, next) => {
-    req.check('title', 'Title should not be empty').notEmpty()
+    req.check('title', 'Title should not be empty').notEmpty().trim()
     req.check('title', 'Title must be between 4 to 150 characters')
         .isLength({
             min: 4,
@@ -23,8 +24,8 @@ exports.createPostValidator = (req, res, next) => {
 }
 
 exports.addFavoriteValidator = (req, res, next) => {
-    req.check('title', 'Title should not be empty').notEmpty()
-    req.check('url', 'Url is required').notEmpty()
+    req.check('title', 'Title should not be empty').notEmpty().trim()
+    req.check('url', 'Url is required').notEmpty().trim()
     const errors = req.validationErrors()
     if (errors) {
         const firstErr = errors.map(err => err.msg)[0]
@@ -34,7 +35,7 @@ exports.addFavoriteValidator = (req, res, next) => {
 }
 
 exports.removeFavoriteValidator = (req, res, next) => {
-    req.check('url', 'Url is required').notEmpty()
+    req.check('url', 'Url is required').notEmpty().trim()
     const errors = req.validationErrors()
     if (errors) {
         const firstErr = errors.map(err => err.msg)[0]
@@ -44,14 +45,20 @@ exports.removeFavoriteValidator = (req, res, next) => {
 }
 
 exports.createSignupValidator = (req, res, next) => {
-    console.log('req', req.body)
+    // console.log('req', req.body)
     req.check('name', 'Name is required').notEmpty()
-    req.check('email', 'Email is required').notEmpty()
+    req.check('email')
+        .notEmpty()
+        .withMessage('Email is required')
+        .matches(EmailRegex)
+        .withMessage('Email is not valid')
+        .trim()
     req.check('password')
         .notEmpty()
         .withMessage('Password is required')
         .isLength({ min: 6 })
         .withMessage('Password must be min 6 characters')
+        .trim()
     const errors = req.validationErrors()
     if (errors) {
         const firstErr = errors.map(err => err.msg)[0]
@@ -61,5 +68,20 @@ exports.createSignupValidator = (req, res, next) => {
 }
 
 exports.createSigninValidator = (req, res, next) => {
+    req.check('email')
+        .notEmpty()
+        .withMessage('Email is required')
+        .matches(EmailRegex)
+        .withMessage('Email is not valid')
+        .trim()
+    req.check('password')
+        .notEmpty()
+        .withMessage('Password is required')
+        .trim()
+    const errors = req.validationErrors()
+    if (errors) {
+        const firstErr = errors.map(err => err.msg)[0]
+        return res.status(400).json({ error: firstErr })
+    }
     next()
 }

@@ -84,6 +84,7 @@ exports.removeFavorite = async (req, res) => {
 
 exports.getFavorites = (req, res) => {
     // console.log('authUser', req.authUser)
+    // console.log('token', req.headers.authorization)
     const userId = req.authUser.userId
     console.log('UserId:', userId)
     News.find({ users: userId })

@@ -2,12 +2,13 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const expressJwt = require('express-jwt')
+const TOKEN_ALGORITHM = 'HS256'
 
 exports.signup = async (req, res) => {
-    console.log('Creating new user signup')
+    console.log(`Creating new user signup, email: '${req.body.email}'`)
     const userExists = await User.findOne({ email: req.body.email })
     if (userExists) {
-        return res.status(400).json({ error: 'User with email same exists' })
+        return res.status(400).json({ error: 'User with same email exists' })
     }
     const user = new User(req.body)
     try {
@@ -55,8 +56,9 @@ exports.signout = (req, res) => {
 
 exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET,
+    // requestProperty: 'authUser',
     userProperty: 'authUser',
-    algorithms: ['HS256']
+    algorithms: [TOKEN_ALGORITHM]
 })
 
 function getUserToken(userId) {
@@ -64,5 +66,5 @@ function getUserToken(userId) {
         // payload
         { userId: userId },
         process.env.JWT_SECRET,
-        { algorithm: 'HS256', expiresIn: '1d' })
+        { algorithm: TOKEN_ALGORITHM, expiresIn: '1d' })
 }
