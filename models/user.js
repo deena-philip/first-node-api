@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, trim: true },
     hashed_password: { type: String, required: true },
     salt: { type: String },
-    created: { type: Date, default: Date.now }
+    created: { type: Date, default: Date.now },
+    resetPasswordLink: { type: String, default: "" }
 })
 
 userSchema.virtual('password')
