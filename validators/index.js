@@ -2,6 +2,16 @@
 
 const EmailRegex = /.+\@.+\..+/
 
+
+function handleError(req, res, next) {
+    const errors = req.validationErrors()
+    if (errors) {
+        const firstErr = errors.map(err => err.msg)[0]
+        return res.status(400).json({ error: firstErr })
+    }
+    next()
+}
+
 exports.createPostValidator = (req, res, next) => {
     req.check('title', 'Title should not be empty').notEmpty().trim()
     req.check('title', 'Title must be between 4 to 150 characters')
@@ -71,11 +81,6 @@ exports.createForgotPasswordValidator = (req, res, next) => {
     return handleError(req, res, next)
 }
 
-function handleError(req, res, next) {
-    const errors = req.validationErrors()
-    if (errors) {
-        const firstErr = errors.map(err => err.msg)[0]
-        return res.status(400).json({ error: firstErr })
-    }
-    next()
+exports.createResetPasswordValidator = (req, res, next) => {
+    return handleError(req, res, next)
 }
