@@ -7,6 +7,9 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
 
+// multer for multipart upload
+const multer = require('multer')
+
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const postRoutes = require('./routes/post')
@@ -39,6 +42,9 @@ app.use('/api', favoriteRoutes)
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         return res.status(401).json({ error: 'Unauthorized' })
+    } else if (err instanceof multer.MulterError) {
+        console.error(err)
+        return res.status(400).json({ error: err.message })
     }
     next()
 })

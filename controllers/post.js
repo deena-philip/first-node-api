@@ -1,4 +1,5 @@
 const Post = require('../models/post')
+const fs = require('fs/promises')
 
 exports.getPosts = (req, res) => {
     Post.find()
@@ -26,3 +27,32 @@ exports.createPost = (req, res) => {
         }
     })
 }
+
+exports.upload = (req, res) => {
+    var reqFile = req.file
+    fs.readFile('uploads/' + reqFile.filename)
+        .then(data => {
+            console.log('------------------------------------------------')
+            // console.log('Data:', Buffer.from(data).toString())
+            console.log('------------------------------------------------')
+        }).catch(err => {
+            console.error('Error reading file:', err.message)
+        })
+    return res.json({ message: 'Upload done!' })
+}
+
+
+/*
+
+(err, data) => {
+            if (err) {
+                console.error('Error reading file:', err.message)
+                return
+            }
+            console.log('------------------------------------------------')
+            console.log('Data:', Buffer.from(data).toString())
+            console.log('------------------------------------------------')
+        }
+
+
+        */

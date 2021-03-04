@@ -84,3 +84,12 @@ exports.createForgotPasswordValidator = (req, res, next) => {
 exports.createResetPasswordValidator = (req, res, next) => {
     return handleError(req, res, next)
 }
+
+exports.createUploadPostValidator = (req, res, next) => {
+    console.log('req.file:', req.file)
+    console.log('req.files:', req.files)
+    if (!req.file) {
+        return res.status(400).json({ error: 'File is required' })
+    }
+    next()
+}
