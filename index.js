@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 dotenv.config()
 
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const postRoutes = require('./routes/post')
 const favoriteRoutes = require('./routes/favorite')
@@ -31,7 +31,7 @@ const port = process.env.PORT || 3000
 const app = express()
 // middleware for tracking routes
 app.use(morgan('dev'))
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(expressValidator())
 app.use('/api', authRoutes)
 app.use('/api', postRoutes)

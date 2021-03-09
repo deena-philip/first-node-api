@@ -58,6 +58,7 @@ exports.createSignupValidator = (req, res, next) => {
 }
 
 exports.createSigninValidator = (req, res, next) => {
+    console.log(req.body)
     req.check('email')
         .notEmpty()
         .withMessage('Email is required')
